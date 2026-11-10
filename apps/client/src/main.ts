@@ -5,4 +5,4 @@ if (app == null){
 	throw new Error("app not found");
 }
 
-app.textContent = engineVersion();
+app.textContent = `engine v${engineVersion()}`;
