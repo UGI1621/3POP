@@ -1,0 +1,17 @@
+{
+  "name": "@3pop/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@3pop/engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6"
+  }
+}
