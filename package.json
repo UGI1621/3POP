@@ -1,6 +1,10 @@
 {
   "name": "3pop",
   "private": true,
+   "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "pnpm --filter \"./packages/*\" build && pnpm -r typecheck"
+  },
   "packageManager": "pnpm@12.18.0",
   "engines": {
     "node": ">=26.13.0 <27"
