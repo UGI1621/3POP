@@ -1,7 +1,7 @@
 {
   "name": "3pop",
   "private": true,
-   "scripts": {
+  "scripts": {
     "build": "pnpm -r build",
     "typecheck": "pnpm --filter \"./packages/*\" build && pnpm -r typecheck"
   },
@@ -10,6 +10,6 @@
     "node": ">=26.13.0 <27"
   },
   "devDependencies": {
-    "typescript": "^7.0.2"
+    "typescript": "~6.0.3"
   }
 }
