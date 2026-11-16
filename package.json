@@ -1,15 +1,21 @@
 {
   "name": "3pop",
   "private": true,
+  "type" : "module",
   "scripts": {
     "build": "pnpm -r build",
-    "typecheck": "pnpm --filter \"./packages/*\" build && pnpm -r typecheck"
+    "typecheck": "pnpm --filter \"./packages/*\" build && pnpm -r typecheck",
+    "lint": "eslint ."
+
   },
   "packageManager": "pnpm@12.18.0",
   "engines": {
     "node": ">=26.13.0 <27"
   },
   "devDependencies": {
-    "typescript": "~6.0.3"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.2"
   }
 }
