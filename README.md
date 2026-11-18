@@ -67,13 +67,15 @@ client 개발 서버는 http://localhost:5173 에서 열린다.
 
 루트에서 실행한다.
 
-| 명령                | 하는 일                                              |
-| ------------------- | ---------------------------------------------------- |
-| `pnpm build`        | 모든 패키지를 의존성 순서대로 빌드 (engine → 나머지) |
-| `pnpm typecheck`    | `packages/*`를 빌드한 뒤 전체 타입 검사              |
-| `pnpm lint`         | ESLint 검사                                          |
-| `pnpm format`       | Prettier로 전체 포맷 적용                            |
-| `pnpm format:check` | 포맷 검사만 수행 (파일 수정 없음)                    |
+| 명령                | 하는 일                                                                     |
+| ------------------- | --------------------------------------------------------------------------- |
+| `pnpm build`        | 모든 패키지를 의존성 순서대로 빌드 (engine → 나머지)                        |
+| `pnpm typecheck`    | `packages/*`를 빌드한 뒤 전체 타입 검사                                     |
+| `pnpm lint`         | ESLint 검사                                                                 |
+| `pnpm format`       | Prettier로 전체 포맷 적용                                                   |
+| `pnpm format:check` | 포맷 검사만 수행 (파일 수정 없음)                                           |
+| `pnpm clean`        | 모든 패키지의 `dist/` 삭제 (`node_modules`는 유지)                          |
+| `pnpm check`        | format:check -> lint -> typecheck -> build 순서로 전체 검증. push 전에 실행 |
 
 ## 구조
 
@@ -146,14 +148,17 @@ packages/
    git pull
    git switch -c feat/engine-prng
    ```
-2. 작게 나눠서 커밋한다
-3. push하고 `main`으로 PR을 연다
-4. lint, typecheck, format:check가 통과하면 merge한다
-5. merge한 브랜치는 삭제한다
+2. 작게 나눠서 커밋한다. 커밋 전에 `pnpm format`과 `pnpm lint`를 실행한다
+3. push 전에 전체 검증을 통과시킨다
+   ```bash
+   pnpm check
+   ```
+4. push하고 `main`으로 PR을 연다
+5. 리뷰가 끝나면 merge한다
+6. merge한 브랜치는 삭제한다
 
 ### 그 밖의 규칙
 
 - 커밋 메시지는 [Conventional Commits](https://www.conventionalcommits.org/) 형식을 따른다
-- 커밋 전에 `pnpm lint`, `pnpm typecheck`, `pnpm format:check`를 통과시킨다
 - `.env` 등 비밀값은 커밋하지 않는다
 - AI를 적극 활용하되 AI가 직접 코드를 작성하지 못하도록 한다. (최소한 복사 붙여넣기를 하자.)
