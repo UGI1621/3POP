@@ -5,7 +5,7 @@ const rawPort = process.env.PORT;
 const strPort = rawPort ?? "3000";
 const port = Number(strPort);
 if (Number.isNaN(port)) {
-  throw new Error(`invalid port number: ${port}`);
+  throw new Error(`invalid port number: ${strPort}`);
 }
 
 const rawHost = process.env.HOST;
