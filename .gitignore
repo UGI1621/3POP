@@ -22,3 +22,4 @@ coverage/
 # personal (claude tutor mode)
 CLAUDE.md
 .claude/settings.local.json
+PROGRESS.md
