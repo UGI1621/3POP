@@ -7,7 +7,9 @@
     "typecheck": "pnpm --filter \"./packages/*\" build && pnpm -r typecheck",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "clean": "rm -rf packages/*/dist apps/*/dist",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm build"
   },
   "packageManager": "pnpm@12.18.0",
   "engines": {
