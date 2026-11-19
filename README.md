@@ -83,7 +83,7 @@ Node 버전을 올린 뒤에는 `npm i -g corepack`과 `corepack enable pnpm`을
 ```
 apps/
   client/    # 웹 클라이언트 (Vite)
-  server/    # API와 실시간 서버 (Node)
+  server/    # API와 실시간 서버 (Fastify).
 packages/
   engine/    # 결정적 게임 규칙 엔진. client와 server가 함께 사용
 ```
