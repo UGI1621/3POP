@@ -7,61 +7,62 @@
 컴투스의 액션 퍼즐 패밀리 중 엄마의 3단정리에서 영감을 받았다.
 이 프로젝트는 컴투스와 무관하다.
 
-## 요구 사항
-
-| 도구    | 버전    | 고정 위치                         |
-| ------- | ------- | --------------------------------- |
-| Node.js | 26.13.0 | `.node-version`                   |
-| pnpm    | 12.18.0 | `package.json`의 `packageManager` |
-
-버전은 저장소 파일에 고정되어 있으므로 직접 고를 필요가 없다.
-
 ## 시작하기
 
-### 0. 지원 환경
-
-- macOS
-- Linux
-- Windows: **WSL2 (Ubuntu) 안에서 진행한다.** 저장소도 Windows 드라이브(`/mnt/c/...`)가 아닌 WSL 홈 디렉터리(`~/`)에 clone한다.
-
-### 1. Node 버전 관리 도구 (fnm)
-
-[fnm 공식 README](https://github.com/Schniz/fnm#installation)의 방법으로 설치한 뒤, 셸 설정 파일에 아래 줄을 추가하고 터미널을 새로 연다.
-
-| 셸   | 설정 파일   | 추가할 줄                                    |
-| ---- | ----------- | -------------------------------------------- |
-| zsh  | `~/.zshrc`  | `eval "$(fnm env --use-on-cd --shell zsh)"`  |
-| bash | `~/.bashrc` | `eval "$(fnm env --use-on-cd --shell bash)"` |
-
-### 2. 저장소 받기와 Node 설치
+필요한 것: Git, Docker (Docker Desktop 등). Windows는 **WSL2 (Ubuntu) 안에서** 진행하고, 저장소도 WSL 홈 디렉터리(`~/`)에 clone한다.
 
 ```bash
 git clone https://github.com/UGI1621/3POP.git
 cd 3POP
-fnm install
+cp .env.example .env
+docker compose up
 ```
 
-`fnm install`은 `.node-version`을 읽어서 맞는 버전을 설치한다.
+| 서비스          | 주소                         | 하는 일                            |
+| --------------- | ---------------------------- | ---------------------------------- |
+| client          | http://localhost:5173        | Vite 개발 서버 (HMR)               |
+| server          | http://localhost:3000/health | API 서버. DB와 redis 상태를 응답   |
+| engine          | -                            | `tsc --watch`로 engine을 계속 빌드 |
+| postgres, redis | 5432, 6379                   | 개발용 DB                          |
 
-### 3. pnpm 활성화
+코드를 고치면 컨테이너 안에서 자동으로 반영된다 (client는 HMR, server는 재시작).
+
+자주 쓰는 명령:
 
 ```bash
-npm i -g corepack
-corepack enable pnpm
+docker compose up -d         # 백그라운드로 실행
+docker compose logs -f server
+docker compose down          # 종료 (DB 데이터는 유지)
+docker compose down -v       # 종료 + DB 데이터 삭제
 ```
 
-Node 26부터 corepack이 기본 포함되지 않아 따로 설치한다.
-
-### 4. 의존성 설치와 실행
+의존성(`package.json`, `pnpm-lock.yaml`)이 바뀌었다면 이미지를 다시 만든다.
 
 ```bash
-pnpm install
-pnpm build
-pnpm --filter @3pop/server start
-pnpm --filter @3pop/client dev
+docker compose up --build -V
 ```
 
-client 개발 서버는 http://localhost:5173 에서 열린다.
+## 로컬 개발 도구 (선택)
+
+에디터의 타입 검사·자동완성, `pnpm check` 실행에는 호스트에도 Node와 pnpm이 필요하다.
+
+| 도구    | 버전    | 고정 위치                         |
+| ------- | ------- | --------------------------------- |
+| Node.js | 26.13.1 | `.node-version`                   |
+| pnpm    | 12.18.0 | `package.json`의 `packageManager` |
+
+1. [fnm](https://github.com/Schniz/fnm#installation)을 설치하고 셸 설정에 추가한다.
+   - zsh: `~/.zshrc`에 `eval "$(fnm env --use-on-cd --shell zsh)"`
+   - bash: `~/.bashrc`에 `eval "$(fnm env --use-on-cd --shell bash)"`
+2. 저장소 폴더에서 아래를 실행한다.
+   ```bash
+   fnm install
+   npm i -g corepack
+   corepack enable pnpm
+   pnpm install
+   ```
+
+Node 버전을 올린 뒤에는 `npm i -g corepack`과 `corepack enable pnpm`을 다시 실행해야 한다 (전역 패키지는 Node 버전마다 따로 설치된다).
 
 ## 스크립트
 
