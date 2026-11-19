@@ -42,7 +42,7 @@ export const buildApp = (deps: Deps): FastifyInstance => {
     if (!ok) {
       reply.code(503);
     }
-    return { status: "ok", engine: engineVersion(), db, redis };
+    return { status: ok ? "ok" : "error", engine: engineVersion(), db, redis };
   });
   return app;
 };
