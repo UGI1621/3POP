@@ -27,14 +27,28 @@ services:
       timeout: 3s
       retries: 10
 
+  engine:
+    build:
+      context: .
+      target: dev
+    init: true
+    command: /app/node_modules/.bin/tsc -p packages/engine --watch --preserveWatchOutput
+    volumes:
+      - .:/app
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD", "test", "-f", "/app/packages/engine/dist/index.js"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
   server:
     build:
       context: .
       target: dev
     init: true
-    #command: sh -c "pnpm --filter @3pop/engine build && pnpm --filter @3pop/server dev"
     # pnpm을 거치면 SIGTERM을 받은 pnpm이 먼저 죽어서 graceful shutdown이 안 됨 → node 직접 실행
-    command: sh -c "pnpm --filter @3pop/engine build && cd apps/server && exec node --watch src/index.ts"
+    command: sh -c "cd apps/server && exec node --watch src/index.ts"
 
     environment:
       HOST: 0.0.0.0
@@ -52,7 +66,24 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      engine:
+        condition: service_healthy
 
+  client:
+    build:
+      context: .
+      target: dev
+    init: true
+    command: sh -c "cd apps/client && exec ./node_modules/.bin/vite --host 0.0.0.0"
+    ports:
+      - "127.0.0.1:${CLIENT_PORT}:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/apps/client/node_modules
+    depends_on:
+      engine:
+        condition: service_healthy
 volumes:
   postgres-data:
   redis-data:
