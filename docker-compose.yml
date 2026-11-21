@@ -32,7 +32,7 @@ services:
       context: .
       target: dev
     init: true
-    command: /app/node_modules/.bin/tsc -p packages/engine --watch --preserveWatchOutput
+    command: /app/node_modules/.bin/tsc -p packages/engine/tsconfig.build.json --watch --preserveWatchOutput
     volumes:
       - .:/app
       - /app/node_modules
