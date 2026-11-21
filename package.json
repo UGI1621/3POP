@@ -9,7 +9,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "clean": "rm -rf packages/*/dist apps/*/dist",
-    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm build"
+    "test": "pnpm -r test",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
   },
   "packageManager": "pnpm@12.18.0",
   "engines": {
